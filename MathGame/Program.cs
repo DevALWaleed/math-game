@@ -1,21 +1,93 @@
-﻿// Creating a main menu with infinite loop
-var userInput = "";
-while (userInput != "5")
-{
-    Console.WriteLine("Welcome to Math Game! Please select what operation you want to do from below:");
-    Console.WriteLine("Type 1 on your keyboard to perfrom adding.");
-    Console.WriteLine("Type 2 on your keyboard to perform subtracing");
-    Console.WriteLine("Type 3 on your keyboard to perform multiplication");
-    Console.WriteLine("Type 4 on your keyboard to perform divison");
-    Console.WriteLine("Type 5 on your keyboard to leave.");
+﻿// TODO (Alwaleed): Record results in a list and make the user access his results history
+// TODO (Alwaleed): Display wrong message if result is wrong
 
-    userInput = Console.ReadLine(); // Take an input from a user to choose on the menu
-    switch (userInput)
+int GetRandomNumber()
+{
+    Random rnd = new Random();
+    return rnd.Next(0, 11); // Generating a random number from 0 to 10
+}
+
+int GetUserAnswer()
+{
+    return Convert.ToInt32(Console.ReadLine());
+}
+
+// Creating a main menu
+var userMenuChoice = "";
+while (userMenuChoice != "5")
+{
+    Console.WriteLine("Welcome to Math Game! Please select what operation do you want to be questioned with:\n");
+    Console.WriteLine("Type 1 for adding\n");
+    Console.WriteLine("Type 2 for subtracing\n");
+    Console.WriteLine("Type 3 for multiplication\n");
+    Console.WriteLine("Type 4 for divison\n");
+    Console.WriteLine("Type 5 to exit\n");
+
+    // Generating two random operands each iteration
+    int firstRandomOperand = GetRandomNumber();
+    int secondRandomOperand = GetRandomNumber();
+
+    // Take an input from a user to choose on the menu
+    Console.Write("Your input: ");
+    userMenuChoice = Console.ReadLine();
+    switch (userMenuChoice)
     {
-        // TODO (Al-Waleed): add a case for each operation
+        case "1":
+            {
+                Console.WriteLine($"{firstRandomOperand} + {secondRandomOperand} = ?");
+                int userAnswer = GetUserAnswer();
+                if (userAnswer == (firstRandomOperand + secondRandomOperand)) Console.WriteLine("Correct!\n");
+                break;
+            }
+
+        case "2":
+            {
+                Console.WriteLine($"{firstRandomOperand} - {secondRandomOperand} = ?");
+                int userAnswer = GetUserAnswer();
+                if (userAnswer == (firstRandomOperand - secondRandomOperand)) Console.WriteLine("Correct!\n");
+                break;
+            }
+
+        case "3":
+            {
+                Console.WriteLine($"{firstRandomOperand} * {secondRandomOperand} = ?");
+                int userAnswer = GetUserAnswer();
+                if (userAnswer == (firstRandomOperand * secondRandomOperand)) Console.WriteLine("Correct!\n");
+                break;
+            }
+
+        case "4":
+            {
+                // Handling if second operand do not equal to zero and bind it to 1
+                if (secondRandomOperand == 0) secondRandomOperand = 1;
+                // Handling if the result is not an integer
+                if (firstRandomOperand % secondRandomOperand != 0)
+                {
+                    Random random = new Random();
+
+                    secondRandomOperand = random.Next(1, 11); // between 1 and 10
+
+                    int multiplier = random.Next(1, 11);
+
+                    firstRandomOperand = secondRandomOperand * multiplier;
+
+                    Console.WriteLine($"{firstRandomOperand} ÷ {secondRandomOperand} = ?");
+                    int userAnswer = GetUserAnswer();
+                    if (userAnswer == (firstRandomOperand / secondRandomOperand)) Console.WriteLine("Correct!\n");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine($"{firstRandomOperand} / {secondRandomOperand} = ?");
+                    int userAnswer = GetUserAnswer();
+                    if (userAnswer == (firstRandomOperand / secondRandomOperand)) Console.WriteLine("Correct!\n");
+                    break;
+                }
+            }
+
         case "5":
             Console.WriteLine("See you next time!");
             break;
     }
-    
+
 }
