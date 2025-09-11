@@ -1,6 +1,4 @@
-﻿// TODO (Alwaleed): Record results in a list and make the user access his results history
-// TODO (Alwaleed): Make the user access his results history
-// TODO (Alwaleed): Display wrong message if result is wrong
+﻿// TODO (Alwaleed): Record results in a list and make the user access his results history Make the user access his results history
 
 int GetRandomNumber()
 {
@@ -8,21 +6,26 @@ int GetRandomNumber()
     return rnd.Next(0, 11); // Generating a random number from 0 to 10
 }
 
+// Getting input from the user for the answer
 int GetUserAnswer()
 {
     return Convert.ToInt32(Console.ReadLine());
 }
 
+
 // Creating a main menu
+
+List<GameResult> history = new List<GameResult>(); // This will hold every the data after every round in the game
 var userMenuChoice = "";
-while (userMenuChoice != "5")
+while (userMenuChoice != "6")
 {
     Console.WriteLine("Welcome to Math Game! Please select what operation do you want to be questioned with:\n");
     Console.WriteLine("Type 1 for adding\n");
     Console.WriteLine("Type 2 for subtracing\n");
     Console.WriteLine("Type 3 for multiplication\n");
     Console.WriteLine("Type 4 for divison\n");
-    Console.WriteLine("Type 5 to exit\n");
+    Console.WriteLine("Type 5 to display history\n");
+    Console.WriteLine("Type 6 to exit\n");
 
     // Generating two random operands each iteration
     var firstRandomOperand = GetRandomNumber();
@@ -36,10 +39,19 @@ while (userMenuChoice != "5")
         case "1":
             {
                 Console.WriteLine($"{firstRandomOperand} + {secondRandomOperand} = ?");
-
                 var userAnswer = GetUserAnswer();
-                if (userAnswer == (firstRandomOperand + secondRandomOperand)) Console.WriteLine("Correct!\n");
-                else Console.WriteLine($"Wrong! The answer is: {firstRandomOperand + secondRandomOperand}");
+                var correctAnswer = firstRandomOperand + secondRandomOperand;
+
+                var result = new GameResult($"{firstRandomOperand} + {secondRandomOperand}", userAnswer, correctAnswer);
+
+                history.Add(result);
+
+                if (result.IsCorrect) Console.WriteLine("Correct!\n");
+                else Console.WriteLine($"Wrong! The answer is: {result.CorrectAnswer}");
+
+                Console.Write("Press Enter to exit");
+                Console.ReadLine();
+                Console.WriteLine();
 
                 break;
             }
@@ -50,22 +62,40 @@ while (userMenuChoice != "5")
                 if (firstRandomOperand < secondRandomOperand) (firstRandomOperand, secondRandomOperand) = (secondRandomOperand, firstRandomOperand);
 
                 Console.WriteLine($"{firstRandomOperand} - {secondRandomOperand} = ?");
-
                 var userAnswer = GetUserAnswer();
-                if (userAnswer == (firstRandomOperand - secondRandomOperand)) Console.WriteLine("Correct!\n");
-                else Console.WriteLine($"Wrong! The answer is: {firstRandomOperand - secondRandomOperand}");
+                var correctAnswer = firstRandomOperand - secondRandomOperand;
+
+                
+                var result = new GameResult($"{firstRandomOperand} - {secondRandomOperand}", userAnswer, correctAnswer);
+                
+                history.Add(result);
+
+                if (result.IsCorrect) Console.WriteLine("Correct!\n");
+                else Console.WriteLine($"Wrong! The answer is: {result.CorrectAnswer}");
+
+                Console.Write("Press Enter to exit");
+                Console.ReadLine();
+                Console.WriteLine();
 
                 break;
             }
 
         case "3":
             {
-                
                 Console.WriteLine($"{firstRandomOperand} * {secondRandomOperand} = ?");
-
                 var userAnswer = GetUserAnswer();
-                if (userAnswer == (firstRandomOperand * secondRandomOperand)) Console.WriteLine("Correct!\n");
-                else Console.WriteLine($"Wrong! The answer is: {firstRandomOperand * secondRandomOperand}");
+                var correctAnswer = firstRandomOperand * secondRandomOperand;
+
+                var result = new GameResult($"{firstRandomOperand} * {secondRandomOperand}", userAnswer, correctAnswer);
+                
+                history.Add(result);
+
+                if (result.IsCorrect) Console.WriteLine("Correct!\n");
+                else Console.WriteLine($"Wrong! The answer is: {result.CorrectAnswer}");
+
+                Console.Write("Press Enter to exit");
+                Console.ReadLine();
+                Console.WriteLine();
 
                 break;
             }
@@ -86,9 +116,20 @@ while (userMenuChoice != "5")
 
                     firstRandomOperand = secondRandomOperand * multiplier;
 
-                    Console.WriteLine($"{firstRandomOperand} ÷ {secondRandomOperand} = ?");
+                    Console.WriteLine($"{firstRandomOperand} / {secondRandomOperand} = ?");
                     var userAnswer = GetUserAnswer();
-                    if (userAnswer == (firstRandomOperand / secondRandomOperand)) Console.WriteLine("Correct!\n");
+                    var correctAnswer = firstRandomOperand / secondRandomOperand;
+
+                    var result = new GameResult($"{firstRandomOperand} / {secondRandomOperand}", userAnswer, correctAnswer);
+
+                    history.Add(result);
+
+                    if (result.IsCorrect) Console.WriteLine("Correct!\n");
+                    else Console.WriteLine($"Wrong! The answer is: {result.CorrectAnswer}");
+
+                    Console.Write("Press Enter to exit");
+                    Console.ReadLine();
+                    Console.WriteLine();
 
                     break;
                 }
@@ -96,15 +137,57 @@ while (userMenuChoice != "5")
                 {
                     Console.WriteLine($"{firstRandomOperand} / {secondRandomOperand} = ?");
                     var userAnswer = GetUserAnswer();
-                    if (userAnswer == (firstRandomOperand / secondRandomOperand)) Console.WriteLine("Correct!\n");
+                    var correctAnswer = firstRandomOperand / secondRandomOperand;
+
+                    var result = new GameResult($"{firstRandomOperand} / {secondRandomOperand}", userAnswer, correctAnswer);
+
+                    history.Add(result);
+
+                    if (result.IsCorrect) Console.WriteLine("Correct!\n");
+                    else Console.WriteLine($"Wrong! The answer is: {result.CorrectAnswer}");
+
+                    Console.Write("Press Enter to exit");
+                    Console.ReadLine();
+                    Console.WriteLine();
 
                     break;
                 }
             }
 
         case "5":
+        {
+            Console.WriteLine("\n--- Game History ---");
+            foreach (var record in history)
+            {
+                Console.WriteLine($"{record.Operation} | Your Answer: {record.UserAnswer} | Correct Answer: {record.CorrectAnswer} | {(record.IsCorrect ? "Correct" : "Wrong")}");
+            }
+            Console.WriteLine();
+            Console.Write("Press Enter to exit");
+            Console.ReadLine();
+            Console.WriteLine();
+
+            break;
+        }
+
+        case "6":
             Console.WriteLine("See you next time!");
+
             break;
     }
 
+}
+class GameResult
+{
+    public string Operation { get; set; }
+    public int UserAnswer { get; set; }
+    public int CorrectAnswer { get; set; }
+    public bool IsCorrect { get; set; }
+
+    public GameResult(string operation, int userAnswer, int correctAnswer)
+    {
+        Operation = operation;
+        UserAnswer = userAnswer;
+        CorrectAnswer = correctAnswer;
+        IsCorrect = userAnswer == correctAnswer;
+    }
 }
