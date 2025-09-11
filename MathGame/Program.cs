@@ -1,6 +1,4 @@
-﻿// TODO (Alwaleed): Record results in a list and make the user access his results history Make the user access his results history
-
-int GetRandomNumber()
+﻿int GetRandomNumber()
 {
     Random rnd = new Random();
     return rnd.Next(0, 11); // Generating a random number from 0 to 10
